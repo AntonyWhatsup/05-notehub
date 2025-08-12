@@ -5,10 +5,10 @@ import SearchBox from "../SearchBox/SearchBox";
 import Pagination from "../Pagination/Pagination";
 import NoteList from "../NoteList/NoteList";
 import Modal from "../Modal/Modal";
-import NoteForm from '../NoteForm/NoteForm';
+import NoteForm from "../NoteForm/NoteForm";
 import { fetchNotes } from "../../services/noteService";
 import css from "./App.module.css";
-import { keepPreviousData } from '@tanstack/react-query';
+import { keepPreviousData } from "@tanstack/react-query";
 
 const App = () => {
   const [page, setPage] = useState(1);
@@ -25,7 +25,13 @@ const App = () => {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={search} onChange={setSearch} />
+        <SearchBox
+          value={search}
+          onChange={(value) => {
+            setSearch(value);
+            setPage(1); // скидаємо сторінку при новому пошуку
+          }}
+        />
         {data && data.totalPages > 1 && (
           <Pagination pageCount={data.totalPages} onPageChange={setPage} />
         )}
@@ -37,7 +43,9 @@ const App = () => {
       {isLoading && <p>Loading...</p>}
       {isError && <p>Error loading notes</p>}
 
-      {data && data.notes && data.notes.length > 0 && <NoteList notes={data.notes} />}
+      {data && data.notes && data.notes.length > 0 && (
+        <NoteList notes={data.notes} />
+      )}
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
