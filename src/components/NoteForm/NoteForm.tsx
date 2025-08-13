@@ -6,17 +6,17 @@ import type { CreateNotePayload, NoteTag } from '../../types/note';
 import css from './NoteForm.module.css';
 
 interface NoteFormProps {
-  onSuccess: () => void;
+  onClose: () => void;
 }
 
-const NoteForm: React.FC<NoteFormProps> = ({ onSuccess }) => {
+const NoteForm: React.FC<NoteFormProps> = ({ onClose }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: (newNote: CreateNotePayload) => createNote(newNote),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
-      onSuccess();
+      onClose();
     },
   });
 
@@ -68,7 +68,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ onSuccess }) => {
           </div>
 
           <div className={css.actions}>
-            <button type="button" className={css.cancelButton} onClick={onSuccess}>
+            <button type="button" className={css.cancelButton} onClick={onClose}>
               Cancel
             </button>
             <button

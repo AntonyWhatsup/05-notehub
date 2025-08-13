@@ -4,13 +4,13 @@ import css from "./Pagination.module.css";
 
 interface PaginationProps {
   totalPages: number;
-  currentPage?: number;
+  currentPage: number;
   onPageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   totalPages,
-  currentPage = 0,
+  currentPage,
   onPageChange,
 }) => {
   return (
