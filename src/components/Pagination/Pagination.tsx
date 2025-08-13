@@ -4,13 +4,13 @@ import css from "./Pagination.module.css";
 
 interface PaginationProps {
   pageCount: number;
-  currentPage?: number;
+  activePage?: number;
   onPageChange: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   pageCount,
-  currentPage = 1,
+  activePage = 1,
   onPageChange,
 }) => {
   return (
@@ -22,7 +22,7 @@ const Pagination: React.FC<PaginationProps> = ({
       pageRangeDisplayed={3}
       marginPagesDisplayed={1}
       pageCount={pageCount}
-      forcePage={Math.max(0, currentPage - 1)}
+      forcePage={Math.max(0, activePage - 1)}
       containerClassName={css.pagination}
       pageClassName={css.page}
       breakClassName={css.break}
