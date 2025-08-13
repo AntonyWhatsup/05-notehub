@@ -11,14 +11,15 @@ import css from "./App.module.css";
 import { keepPreviousData } from "@tanstack/react-query";
 
 const App = () => {
-  const [page, setPage] = useState(1);
+  const [pageIndex, setPageIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["notes", page, debouncedSearch],
-    queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
+    queryKey: ["notes", pageIndex, debouncedSearch],
+    queryFn: () =>
+      fetchNotes({ page: pageIndex + 1, perPage: 12, search: debouncedSearch }),
     placeholderData: keepPreviousData,
   });
 
@@ -29,11 +30,15 @@ const App = () => {
           value={search}
           onChange={(value) => {
             setSearch(value);
-            setPage(1); // скидаємо сторінку при новому пошуку
+            setPageIndex(0);
           }}
         />
         {data && data.totalPages > 1 && (
-          <Pagination pageCount={data.totalPages} onPageChange={setPage} />
+          <Pagination
+            totalPages={data.totalPages}
+            currentPage={pageIndex}
+            onPageChange={setPageIndex}
+          />
         )}
         <button className={css.button} onClick={() => setIsModalOpen(true)}>
           Create note +
